@@ -3,7 +3,6 @@ package com.api.gateway;
 import com.api.gateway.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,26 +11,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.WebApplicationContext;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("com.api.gateway.security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private WebApplicationContext applicationContext;
-    @Autowired
     CustomUserDetailsService customUserDetailsService;
 
-    @PostConstruct
+    /*@PostConstruct
     public void completeSetup() {
         customUserDetailsService = applicationContext.getBean(CustomUserDetailsService.class);
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
