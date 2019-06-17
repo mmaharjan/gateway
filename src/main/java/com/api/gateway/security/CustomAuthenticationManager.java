@@ -10,8 +10,9 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomAuthenticationManager implements AuthenticationManager {
+public class CustomAuthenticationManager /*implements AuthenticationManager*/ {
 
+    /*
     // autowire authentication providers here
     @Autowired
     CustomUserDetailsService customUserDetailsService;
@@ -39,7 +40,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
         return usernamePasswordAuthenticationToken;
     }
-
+*/
 
 }
 

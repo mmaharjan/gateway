@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -20,6 +22,10 @@ public class OAuthAuthorizationServer extends AuthorizationServerConfigurerAdapt
     @Autowired
     CustomAuthenticationManager customAuthenticationManager;
 
+    // injecting the custom authentication manager created in SecurityConfig class
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
@@ -29,8 +35,9 @@ public class OAuthAuthorizationServer extends AuthorizationServerConfigurerAdapt
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                .tokenKeyAccess("permitAll")
-                .checkTokenAccess("isAuthenticated");
+                .tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()")
+                .passwordEncoder(new BCryptPasswordEncoder(12));
     }
 
     @Override
@@ -47,7 +54,8 @@ public class OAuthAuthorizationServer extends AuthorizationServerConfigurerAdapt
         // changing oAuth2 token endpoint
         endpoints
                 .pathMapping(defaultEndpoint, customEndpoint)
-                .authenticationManager(customAuthenticationManager)
+                .authenticationManager(authenticationManager)
+                .userDetailsService(customUserDetailsService)
                 .tokenStore(customJwtTokenStore())
                 .accessTokenConverter(customJwtAccessTokenEnhancer());
     }

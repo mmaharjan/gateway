@@ -28,6 +28,8 @@ public class CustomClientDetailsService implements ClientDetailsService {
                 client.getScopes(), client.getAuthorizedGrantTypes(), client.getAuthorities(),
                 client.getUserAuthorities(), client.getClientType());
 
+        clientDetails.setClientSecret(client.getClientSecret());
+
         return clientDetails;
     }
 }

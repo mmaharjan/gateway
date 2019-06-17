@@ -4,6 +4,7 @@ import com.api.gateway.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,8 +40,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
+    /** Making the custom authentication manager global so that OAuthAuthorizationServer can access it by declaring
+     * it a bean.
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(final AuthenticationManagerBuilder authMangerBuilder) throws Exception{
+        // creating a custom authentication manager with the auth manger builder helper
         authMangerBuilder.userDetailsService(customUserDetailsService)
         .and()
         .authenticationProvider(authenticationProvider());
